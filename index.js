@@ -39,4 +39,16 @@ async function getCourses() {
     console.log(courses);
 }
 
-getCourses()
+//getCourses();
+
+//get filtered data
+async function getFilteredCourses() {
+    const courses = await Course
+    .find({ author: "Jolita", isPublished: true})
+    .limit(2)
+    .sort({name: 1})
+    .select({name: 1, tags: 1});
+    console.log(courses);
+}
+
+getFilteredCourses();
