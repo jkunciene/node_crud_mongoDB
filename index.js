@@ -20,9 +20,9 @@ const Course = mongoose.model('Course', courseSchema);
 async function createCourse(){
     //object
         const course = new Course({
-            name: "dotenv",
-            author: "Jolita",
-            tags: ['npm', 'dotenv'],
+            name: "JS",
+            author: "Mosh",
+            tags: ['js', 'javascript'],
             isPublished: true
         });
 
@@ -43,11 +43,17 @@ async function getCourses() {
 
 //get filtered data
 async function getFilteredCourses() {
-    const courses = await Course
-    .find({ author: "Jolita", isPublished: true})
-    .limit(2)
-    .sort({name: 1})
-    .select({name: 1, tags: 1});
+    const courses = await Course  
+    
+    //Starts with Jolita
+    .find({ author: /^Jolita/ })     
+    //Ends whit Course (i - not important case sensitive)
+    .find({ name: /course$/i})
+    // Contains DB
+    .find({ name: /.*db.*/i})
+
+    .sort({ name: 1 })  
+    .select({ author: 1, name: 1, tags: 1 })
     console.log(courses);
 }
 
