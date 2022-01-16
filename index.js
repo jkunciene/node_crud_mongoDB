@@ -43,12 +43,13 @@ async function getCourses() {
 
 //get filtered data
 async function getFilteredCourses() {
-    const courses = await Course  
-    
+    const courses = await Course   
     //Starts with Jolita
-    .find({ author: /^Jolita/ })     
+    .find({ author: /^Jolita/ })   
+    
     //Ends whit Course (i - not important case sensitive)
     .find({ name: /course$/i})
+
     // Contains DB
     .find({ name: /.*db.*/i})
 
@@ -57,4 +58,65 @@ async function getFilteredCourses() {
     console.log(courses);
 }
 
-getFilteredCourses();
+//getFilteredCourses();
+
+//Counting
+async function getCoursesNumber() {
+    const courses = await Course
+    .find()
+    .count()
+    console.log(courses);
+}
+
+//getCoursesNumber();
+
+//Pagination
+async function getCoursesPages() {
+    const pageNumber = 1;
+    const pageSize = 2;
+    // /api/courses?pageNumber=2&pageSize=10
+
+   const courses = await Course
+    .find()
+    .skip((pageNumber - 1) * pageSize)   
+    .limit(pageSize) 
+    console.log(courses);
+}
+//getCoursesPages()
+
+//firts method -> approach: Query first
+//findById()
+//Modify its properties
+//save
+async function updateCourse(id){
+    const course = await Course.findById(id);
+    if(!course) return;
+
+    if(course.isPublished) return;
+
+    course.isPublished = true;
+    course.author = "Another Author";
+    const result = await course.save();
+    console.log(result);
+}
+// getCourses();
+// updateCourse('61cda3bcd600a4a55f6046b1');
+// getCourses();
+//----------------------------------------
+//second method -> approach: update first
+//update directly
+//optionally : get the updated document
+async function updateCourse(id){
+    const result = await Course.updateOne({
+        _id: id }, {
+            $set: {
+                author: "Updated Author",
+                isPublished: false
+            }
+    });
+    console.log(result);
+}
+
+getCourses();
+updateCourse('61cda452f845fb7357008d30');
+getCourses();
