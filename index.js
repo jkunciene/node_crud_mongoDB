@@ -20,10 +20,10 @@ const Course = mongoose.model('Course', courseSchema);
 async function createCourse(){
     //object
         const course = new Course({
-            name: "JS",
-            author: "Mosh",
+            name: "Another Courses",
+            author: "Jolita",
             tags: ['js', 'javascript'],
-            isPublished: true
+            isPublished: false
         });
 
         const result = await course.save();
@@ -117,6 +117,42 @@ async function updateCourse(id){
     console.log(result);
 }
 
-getCourses();
-updateCourse('61cda452f845fb7357008d30');
-getCourses();
+// getCourses();
+// updateCourse('61cda452f845fb7357008d30');
+// getCourses();
+
+//-----------------------------------
+//one more method for updating data
+
+async function updateCourse(id){
+    const course = await Course.findByIdAndUpdate( id , {
+            $set: {
+                author: "Jack",
+                isPublished: true
+            }
+    }, { new: true});
+
+    console.log(course);
+}
+
+// updateCourse('61cda452f845fb7357008d30');
+
+//-----------------------------------------
+async function removeCourse(id){
+    
+    const course = await Course.findByIdAndRemove(id);
+    console.log(course);
+
+    }
+
+//removeCourse('61cdb30c2aab0dbd3e02c23c')
+
+async function removeCourses(){
+    
+    const courses = await Course.deleteMany({
+        isPublished: false
+    });
+    console.log(courses);
+    }
+
+   removeCourses();
